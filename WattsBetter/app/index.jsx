@@ -69,7 +69,7 @@ const app = () => {
 
           <View style={styles.container_sign_up}>
             <Text style={styles.text_no_account}>Não tem uma conta?</Text>
-            <Link href="/dashboard">
+            <Link href="/five_best_elec">
               <Text style={styles.sign_up}>  Registe-se</Text>
             </Link>
           </View>

@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
 
   categoria: {
-
+    flexDirection: 'row',
   },
 
   categoria_ponto: {

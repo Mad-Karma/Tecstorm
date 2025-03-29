@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Text, Button, View, TextInput, StyleSheet, ScrollView } from 'react-native';
 
 // Import JSON file (make sure the path is correct for your project structure)
-import electricityPrices from 'WattsBetter/assets/data/Precos_ELEGN_filtered_elec_only.json';
+import electricityPrices from '@/assets/data/Precos_ELEGN_filtered_elec_only.json';
 
 // Function to get the 5 best options based on total cost
 function getTop5BestOptions(data, consumo) {
