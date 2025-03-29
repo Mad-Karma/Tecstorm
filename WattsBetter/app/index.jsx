@@ -71,7 +71,7 @@ const app = () => {
             <Text style={styles.text_no_account}>Não tem uma conta?</Text>
             <Link href="/dashboard">
               <Text style={styles.sign_up}>  Registe-se</Text>
-              </Link>
+            </Link>
           </View>
 
         </View>
