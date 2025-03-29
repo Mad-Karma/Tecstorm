@@ -7,6 +7,8 @@ import switchIcon from "@/assets/images/icon-switch.png"
 import profileIcon from "@/assets/images/icon-profile.png"
 import compareIcon from "@/assets/images/icon-compare.png"
 import walletIcon from "@/assets/images/icon-wallet.png"
+import logoEDP from "@/assets/images/edp-logo.png"
+import flash from "@/assets/images/flash.png"
 
 const { width, height } = Dimensions.get('window');
 
@@ -71,31 +73,22 @@ export default function TabTwoScreen() {
 
       {/* Contract card */}
       <View style={styles.contracts_card}>
+        
         <Text style={styles.contracts_title}>O seu contrato atual</Text>
 
-        {/* <View style={styles.}>
-          <View style={styles.}>
-            <View style={styles.}>
-              <Image style={styles.}></Image>
-              <View style={styles.}>
-                <Text style={styles.}>Galp</Text>
-                <View style={styles.}>
-                  <Image style={styles.}></Image>
-                  <Text style={styles.}>Eletricidade</Text>
-                </View>
+        <View style={styles.chartContainer}>
+          <View style={styles.contract_top}>
+              <Image source={logoEDP} style={styles.logoEDP}></Image>
+              <View>
+                  <Text style={styles.contract_name}>EDP</Text>
+                  <Text style={styles.contract_cicle}>ciclo simples</Text>
               </View>
-            </View>
-
-            <Text style={styles.price_text}>65,34€</Text>
+              <View style={styles.elec_container}>
+                  <Image source={flash} style={styles.contract_electricity}></Image>
+              </View>
+              <Text style={styles.contract_price}>68,21<Text style={{ color: '#FF7F3F' }}>€</Text></Text>
           </View>
-
-          <Text style={styles.}>Ciclo</Text>
-          <Text style={styles.}>Potência</Text>
-        </View> */}
-
-        <Link href="/login">
-          <Text style={styles.contracts_ver}>Ver</Text>
-        </Link>
+        </View>
       </View>
 
       {/* Investments + Contracts card */}
@@ -251,16 +244,87 @@ const styles = StyleSheet.create({
   contracts_card: {
     flexDirection: 'column',
     flex: 0.25,
-    width: '100%',
+    width: 370,
     marginTop: '10%',
-    marginLeft: '5%',
-    backgroundColor: 'red',
+    marginLeft: 10,
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
 
   contracts_title: {
     color: '#FF7F3E',
     fontSize: calculateFontSize(5),
     fontWeight: 'bold',
+    marginBottom: '10',
+    marginTop: 5,
+    marginLeft: 10,
+  },
+
+  chartContainer: {
+    width: 340,
+    height: 130,
+    marginLeft: 15,
+    backgroundColor: "#f2f5f7",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 16,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+
+  logoEDP: {
+    resizeMode: 'contain',
+    width: 90,
+    height: 80,
+    marginLeft: -18,
+  },
+
+  contract_top: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+
+  contract_name: {
+    fontWeight: 'bold',
+    fontSize: 27,
+    marginLeft: 0,
+    marginTop: 7,
+  },
+
+  contract_price: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginLeft: 75,
+    marginTop: 8,
+  },
+
+  contract_electricity: {
+    width: 20,
+    height: 20,
+  },
+
+  elec_container: {
+    borderColor: '#FF7F3E',
+    borderWidth: 1.5,
+    borderRadius: 5,
+    marginTop: 11,
+    width: 25,
+    height: 25,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: 8,
+    marginTop: 14
+  },
+
+  contract_cicle: {
+    color: '#FF7F3E',
+    fontSize: 12,
+    position: 'absolute',
+    width: 100,
+    top: 39,
   },
 
   // ---- Investments + Projects card  ---
