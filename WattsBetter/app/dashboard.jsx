@@ -73,22 +73,24 @@ export default function TabTwoScreen() {
 
       {/* Contract card */}
       <View style={styles.contracts_card}>
-        
+
         <Text style={styles.contracts_title}>O seu contrato atual</Text>
 
-        <View style={styles.chartContainer}>
-          <View style={styles.contract_top}>
-              <Image source={logoEDP} style={styles.logoEDP}></Image>
-              <View>
-                  <Text style={styles.contract_name}>EDP</Text>
-                  <Text style={styles.contract_cicle}>ciclo simples</Text>
-              </View>
-              <View style={styles.elec_container}>
-                  <Image source={flash} style={styles.contract_electricity}></Image>
-              </View>
-              <Text style={styles.contract_price}>68,21<Text style={{ color: '#FF7F3F' }}>€</Text></Text>
+        <Link href='/contract' style={{marginLeft: 15}}>
+          <View style={styles.chartContainer}>
+            <View style={styles.contract_top}>
+                <Image source={logoEDP} style={styles.logoEDP}></Image>
+                <View>
+                    <Text style={styles.contract_name}>EDP</Text>
+                    <Text style={styles.contract_cicle}>ciclo simples</Text>
+                </View>
+                <View style={styles.elec_container}>
+                    <Image source={flash} style={styles.contract_electricity}></Image>
+                </View>
+                <Text style={styles.contract_price}>68,21<Text style={{ color: '#FF7F3F' }}>€</Text></Text>
+            </View>
           </View>
-        </View>
+        </Link>
       </View>
 
       {/* Investments + Contracts card */}
