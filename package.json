@@ -1,0 +1,25 @@
+{
+  "name": "tecstorm",
+  "version": "1.0.0",
+  "main": "App.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mad-Karma/Tecstorm.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Mad-Karma/Tecstorm/issues"
+  },
+  "homepage": "https://github.com/Mad-Karma/Tecstorm#readme",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "xlsx": "^0.18.5"
+  }
+}
