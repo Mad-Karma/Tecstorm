@@ -29,7 +29,7 @@ export default function TabTwoScreen() {
             <Text style={styles.last_change_text}>A última mudança de contrato {'\n'} foi à <Text style={styles.last_change_days}>10</Text> dias</Text>
           </View>
           
-          <Text style={styles.saved_ammount}>35,5€ <Text style={styles.saved_ammount_arrow}>></Text></Text>
+          <Text style={styles.saved_ammount}>35,5€ <Text style={styles.saved_ammount_arrow}>{'>'}</Text></Text>
           
         </View>
       </ImageBackground>
