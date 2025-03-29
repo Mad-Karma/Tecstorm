@@ -1,6 +1,7 @@
 import React from "react";
 import { Image, View, Text, StyleSheet, ScrollView, Dimensions } from "react-native";
 import { BarChart, LineChart } from "react-native-chart-kit";
+import { Link } from 'expo-router'
 
 import logoEDP from "@/assets/images/edp-logo.png"
 import flash from "@/assets/images/flash.png"
@@ -21,7 +22,9 @@ const chartConfig = {
 export default function Contract() {
   return (    
     <ScrollView style={styles.container}>
-      <Text style={styles.voltar}>{'<'} Voltar</Text>
+        <Link href="/dashboard" style={styles.voltar}>
+            <Text style={styles.voltar}>{'<'} Voltar</Text>
+        </Link>
 
       <View style={styles.quadrados}>
         <View style={styles.quadrado1}>
@@ -39,35 +42,38 @@ export default function Contract() {
       <View style={styles.chartContainer}>
         <View style={styles.contract_top}>
             <Image source={logoEDP} style={styles.logoEDP}></Image>
-            <Text style={styles.contract_name}>EDP</Text>
+            <View>
+                <Text style={styles.contract_name}>EDP</Text>
+                <Text style={styles.contract_cicle}>ciclo simples</Text>
+            </View>
             <View style={styles.elec_container}>
                 <Image source={flash} style={styles.contract_electricity}></Image>
             </View>
             <Text style={styles.contract_price}>68,21<Text style={{ color: '#FF7F3F' }}>€</Text></Text>
         </View>
 
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'column', marginTop: 20}}>
             <View style={styles.contract_block1}>
-                <View style={styles.categoria_termo}><Text>Termo fixo</Text></View>
+                <View style={styles.categoria_termo}><Text style={styles.categoria_termo_texto}>Termo fixo</Text></View>
                 <View style={styles.categoria}>
-                    <Text>Potência contratada</Text>
-                    <Text>6.9 kVA</Text>
+                    <Text style={styles.categoria_ponto}>Potência contratada</Text>
+                    <Text style={styles.categoria_valor}>6.9 kVA</Text>
                 </View>
                 <View style={styles.categoria}>
-                    <Text>Preço por dia</Text>
-                    <Text>0.400 €/dia</Text>
+                    <Text style={styles.categoria_ponto}>Preço por dia</Text>
+                    <Text style={styles.categoria_valor3}>0.400 €/dia</Text>
                 </View>
             </View>
             
             <View style={styles.contract_block2}>
-                <View style={styles.categoria_termo}><Text>Termo variável</Text></View>
+                <View style={styles.categoria_termo}><Text style={styles.categoria_termo_texto}>Termo variável</Text></View>
                 <View style={styles.categoria}>
                     <Text style={styles.categoria_ponto}>Consumo total</Text>
-                    <Text style={styles.categoria_valor}>300.00 kWh</Text>
+                    <Text style={styles.categoria_valor4}>300.00 kWh</Text>
                 </View>
                 <View style={styles.categoria}>
-                    <Text>Preço por kWh</Text>
-                    <Text>0.145 €/kWh</Text>
+                    <Text style={styles.categoria_ponto}>Preço por kWh</Text>
+                    <Text style={styles.categoria_valor2}>0.145 €/kWh</Text>
                 </View>
             </View>
         </View>
@@ -235,30 +241,78 @@ const styles = StyleSheet.create({
 
   contract_block1: {
     backgroundColor: '#f2f5f7',
-    marginLeft: 0,
-    width: 165,
+    width: 340,
+    borderRadius: 10,
+  },
+
+  contract_cicle: {
+    color: '#FF7F3E',
+    fontSize: 12,
+    position: 'absolute',
+    width: 100,
+    top: 37,
   },
 
   contract_block2: {
     backgroundColor: '#f2f5f7',
-    marginLeft: 5,
-    width: 165,
-  },
-
-  categoria_termo: {
-
+    width: 340,
+    borderRadius: 10,
+    marginTop: 10,
   },
 
   categoria: {
     flexDirection: 'row',
+    height: 32,
+  },
+
+  categoria_termo: {
+    backgroundColor: '#ced3d6',
+    borderRadius: 10,
+    width: '100%',
+    height: 28,
+    fontWeight: 'bold',
+    fontSize: 500,
+    marginBottom: 0,
+  },
+
+  categoria_termo_texto: {
+    marginLeft: 7,
+    marginTop: 2,
+    fontWeight: 500,
+    fontSize: 16.5,
   },
 
   categoria_ponto: {
-
+    fontSize: 14,   
+    marginLeft: 5,
+    marginTop: 5,
+    marginBottom: 5,
+    color: '#505254',
   },
 
   categoria_valor: {
-
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 150,
   },
+
+  categoria_valor2: {
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 155,
+  },
+
+  categoria_valor3: {
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 171,
+  },
+
+  categoria_valor4: {
+    fontSize: 14,
+    marginTop: 5,
+    marginLeft: 159,
+  },
+
 
 });
