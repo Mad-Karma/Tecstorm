@@ -61,7 +61,7 @@ const app = () => {
             Esqueceu a palavra-passe?
           </Text>
 
-          <Link href="/dashboard" asChild>
+          <Link href="/contract" asChild>
             <TouchableOpacity style={styles.login_button} onPress={handleLogin}>
               <Text style={styles.login_text}>Log In</Text>
             </TouchableOpacity>
@@ -71,7 +71,7 @@ const app = () => {
             <Text style={styles.text_no_account}>Não tem uma conta?</Text>
             <Link href="/dashboard">
               <Text style={styles.sign_up}>  Registe-se</Text>
-              </Link>
+            </Link>
           </View>
 
         </View>
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '50%',
-    backgroundColor: '#ebedeb',
+    backgroundColor: '#F9F9F9',
     zIndex: 0,
   },
 
@@ -132,6 +132,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 15,
     alignItems: 'center',
+    elevation: 2, // sombra no Android
+    shadowColor: '#000', // sombra no iOS
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
 
   input: {

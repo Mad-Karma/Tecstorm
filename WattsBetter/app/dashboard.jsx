@@ -28,7 +28,9 @@ export default function TabTwoScreen() {
             <Text style={styles.saved_text}>Este mês poupou</Text>
             <Text style={styles.last_change_text}>A última mudança de contrato {'\n'} foi à <Text style={styles.last_change_days}>10</Text> dias</Text>
           </View>
-          <Text style={styles.saved_ammount}>35,5€ <Text style={styles.saved_ammount_arrow}>></Text></Text>
+          
+          <Text style={styles.saved_ammount}>35,5€ <Text style={styles.saved_ammount_arrow}>{'>'}</Text></Text>
+          
         </View>
       </ImageBackground>
 
@@ -71,25 +73,25 @@ export default function TabTwoScreen() {
       <View style={styles.contracts_card}>
         <Text style={styles.contracts_title}>O seu contrato atual</Text>
 
-        <View>
-          <View>
-            <View>
-              <Image></Image>
-              <View>
-                <Text>Galp</Text>
-                <View>
-                  <Image></Image>
-                  <Text>Eletricidade</Text>
+        {/* <View style={styles.}>
+          <View style={styles.}>
+            <View style={styles.}>
+              <Image style={styles.}></Image>
+              <View style={styles.}>
+                <Text style={styles.}>Galp</Text>
+                <View style={styles.}>
+                  <Image style={styles.}></Image>
+                  <Text style={styles.}>Eletricidade</Text>
                 </View>
               </View>
             </View>
 
-            <Text>65,34€</Text>
+            <Text style={styles.price_text}>65,34€</Text>
           </View>
 
-          <Text>Ciclo</Text>
-          <Text>Potência</Text>
-        </View>
+          <Text style={styles.}>Ciclo</Text>
+          <Text style={styles.}>Potência</Text>
+        </View> */}
 
         <Link href="/login">
           <Text style={styles.contracts_ver}>Ver</Text>
