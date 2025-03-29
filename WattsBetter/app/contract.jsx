@@ -62,8 +62,8 @@ export default function Contract() {
             <View style={styles.contract_block2}>
                 <View style={styles.categoria_termo}><Text>Termo variável</Text></View>
                 <View style={styles.categoria}>
-                    <Text style={categoria_ponto}>Consumo total</Text>
-                    <Text style={categoria_valor}>300.00 kWh</Text>
+                    <Text style={styles.categoria_ponto}>Consumo total</Text>
+                    <Text style={styles.categoria_valor}>300.00 kWh</Text>
                 </View>
                 <View style={styles.categoria}>
                     <Text>Preço por kWh</Text>
@@ -246,7 +246,7 @@ const styles = StyleSheet.create({
   },
 
   categoria_termo: {
-    
+
   },
 
   categoria: {
