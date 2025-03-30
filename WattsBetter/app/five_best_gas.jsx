@@ -24,7 +24,7 @@ export default function FiveBestElec() {
   const handleCalculate = () => {
     setLoading(true);
     setTimeout(() => {
-      const bestOptions = getTop5BestOptions(electricityPrices, parseFloat(consumo));
+      const bestOptions = getTop5BestOptions(gasPrices, parseFloat(consumo));
       setTop5Options(bestOptions);
       setLoading(false);
     }, 500); // Simulating loading state
