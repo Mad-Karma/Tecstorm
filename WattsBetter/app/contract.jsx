@@ -33,10 +33,12 @@ export default function Contract() {
             <Text style={styles.quadrado_frase1}>Com a WattsBetter</Text>
         </View>
 
-        <View style={styles.quadrado2}>
-            <Text style={styles.quadrado_frase2}>Trocas realizadas:</Text>
-            <Text style={styles.quadrado_valor2}>13</Text>
-        </View>
+        <Link href='/auto_switch'>
+          <View style={styles.quadrado2}>
+              <Text style={styles.quadrado_frase2}>Auto Switch:</Text>
+              <Text style={styles.quadrado_valor2}>Ativo</Text>
+          </View>
+        </Link>
       </View>
 
       <View style={styles.chartContainer}>
@@ -168,7 +170,7 @@ const styles = StyleSheet.create({
   },
 
   quadrado_valor2: {
-    color: 'black',
+    color: '#FF7F3E',
     fontWeight: 900,
     fontSize: 23,
   },

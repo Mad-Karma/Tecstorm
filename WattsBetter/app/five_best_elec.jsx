@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Modal, Text, Image, Button, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
+import { Modal, Text, Image, View, TextInput, StyleSheet, ScrollView, Pressable } from 'react-native';
 import { Link } from 'expo-router'
 
 // Import JSON file (make sure the path is correct for your project structure)
 import electricityPrices from '@/assets/data/Precos_ELEGN_filtered_elec_only.json';
+import gasPrices from '@/assets/data/Precos_ELEGN_filtered_gas_only.json';
+
 import questionMark from '@/assets/images/question-mark.png'
 import flash from '@/assets/images/flash.png'
 
-function getTop5BestCompanies(data, consumo) {
+function getTop5BestCompaniesElec(data, consumoEletricidade) {
   const companyBestOffers = {};
 
   data
@@ -16,7 +18,7 @@ function getTop5BestCompanies(data, consumo) {
       return company !== "IBELECTRA" && company !== "OENEO"; // Exclude both companies
     })
     .forEach(contract => {
-      const totalCost = (consumo * parseFloat(contract["TV|TVFV|TVP"])) + (parseFloat(contract.Pot_Cont) * parseFloat(contract.TF));
+      const totalCost = (consumoEletricidade * parseFloat(contract["TV|TVFV|TVP"])) + (parseFloat(contract.Pot_Cont) * parseFloat(contract.TF));
       const company = contract.COM;
 
       if (!companyBestOffers[company] || totalCost < companyBestOffers[company].totalCost) {
@@ -29,15 +31,78 @@ function getTop5BestCompanies(data, consumo) {
     .slice(0, 5); // Get top 5 companies
 }
 
+function getTop5BestOptionsGas(data, consumo) {
+  return data
+    .map(contract => {
+      const TF = parseFloat(contract["TFGN"]) || 0;
+      const TVGN = parseFloat(contract["TVGN"]) || 0;
+
+      const totalCost = (30 * TF) + (consumo * TVGN);
+      return { ...contract, totalCost };
+    })
+    .sort((a, b) => a.totalCost - b.totalCost)
+    .slice(0, 5);
+}
+
+function getTop5BestCombinationsElecGas(elecData, gasData, consumoE, consumoG) {
+  const bestElec = getTop5BestCompanies(elecData, consumoE, "electricity");
+  const bestGas = getTop5BestCompanies(gasData, consumoG, "gas");
+
+  const combinations = [];
+
+  bestElec.forEach(elecContract => {
+    bestGas.forEach(gasContract => {
+      const totalCost = elecContract.totalCost + gasContract.totalCost;
+      combinations.push({
+        electricity: {
+          company: elecContract.COM,
+          Pot_Cont: elecContract.Pot_Cont,
+          TF: elecContract.TF,
+          variableTariff: elecContract["TV|TVFV|TVP"],
+          totalCost: elecContract.totalCost
+        },
+        gas: {
+          company: gasContract.COM,
+          TFGN: gasContract.TFGN,
+          TVGN: gasContract.TVGN,
+          totalCost: gasContract.totalCost
+        },
+        combinedTotalCost: totalCost
+      });
+    });
+  });
+
+  return JSON.stringify(
+    combinations
+      .sort((a, b) => a.combinedTotalCost - b.combinedTotalCost) // Sort by lowest cost
+      .slice(0, 5), // Get top 5 combinations
+    null,
+    2
+  ); // Pretty JSON format
+}
+
 export default function Five_best_elec() {
   const [top5Options, setTop5Options] = useState([]);
-  const [consumo, setConsumo] = useState('200'); // Default consumption of 200 kWh
+  const [consumoEletricidade, setConsumoEletricidade] = useState('');
+  const [consumoGas, setConsumoGas] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleCalculate = () => {
     setLoading(true);
-    const bestOptions = getTop5BestCompanies(electricityPrices, parseFloat(consumo));
-    setTop5Options(bestOptions);
+
+    if(consumoEletricidade.length > 0 && consumoGas.length == 0) {
+      const bestOptions = getTop5BestCompaniesElec(electricityPrices, parseFloat(consumoEletricidade));
+      setTop5Options(bestOptions);
+    }
+    if(consumoEletricidade.length == 0 && consumoGas.length > 0) {
+      const bestOptions = getTop5BestOptionsGas(gasPrices, parseFloat(consumoGas));
+      setTop5Options(bestOptions);
+    }
+    if(consumoEletricidade.length > 0 && consumoGas.length > 0) {
+      const bestOptions = getTop5BestCombinationsElecGas(electricityPrices, gasPrices, parseFloat(consumoEletricidade), parseFloat(consumoGas));
+      setTop5Options(bestOptions);
+    }
+    
     setLoading(false);
   };
 
@@ -59,7 +124,7 @@ export default function Five_best_elec() {
             keyboardType="numeric"
             value={0}
             placeholder='Insira o seu consumo'
-            onChangeText={setConsumo}
+            onChangeText={setConsumoEletricidade}
           />
         </View>
 
@@ -75,7 +140,7 @@ export default function Five_best_elec() {
             keyboardType="numeric"
             value={0}
             placeholder='Insira o seu consumo'
-            onChangeText={setConsumo}
+            onChangeText={setConsumoGas}
           />
         </View>
       </View>
@@ -86,7 +151,7 @@ export default function Five_best_elec() {
       
       {loading ? <Text>Loading...</Text> : null}
       
-      {top5Options.length > 0 && (
+      {consumoEletricidade !== "" && consumoGas === "" && top5Options.length > 0 && (
         <ScrollView style={styles.resultsContainer}>
           {top5Options.map((option, index) => (
             <View key={index} style={styles.result}>
@@ -115,6 +180,107 @@ export default function Five_best_elec() {
                 <Text style={styles.preco_dia}>{`Preço por Dia: ${option.TF.toFixed(2)}€`}</Text>
                 <Text style={styles.barra}>|</Text>
                 <Text style={styles.preco_kwh}>{`Preço por kWh: ${option["TV|TVFV|TVP"].toFixed(2)}€`}</Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+
+      {consumoEletricidade === "" && consumoGas !== "" && top5Options.length > 0 && (
+        <ScrollView style={styles.resultsContainer}>
+          {top5Options.map((option, index) => (
+            <View key={index} style={styles.result}>
+              <View style={{flexDirection: 'row'}}>
+                {option.COM === "EDPC" ? (
+                  <Image source={require("@/assets/images/edp-logo.png")} style={styles.image} />
+                ) : option.COM === "GALP" ? (
+                  <Image source={require("@/assets/images/galp-logo.png")} style={styles.image} />
+                ) : option.COM === "G9ENERGY" ? (
+                  <Image source={require("@/assets/images/g9-logo.png")} style={styles.image} />
+                ) : option.COM === "GOLD" ? (
+                  <Image source={require("@/assets/images/gold-logo.png")} style={styles.image} />
+                ) : option.COM === "IBD" ? (
+                  <Image source={require("@/assets/images/ibd-logo.png")} style={styles.image} />
+                ) : null}
+                
+                <View style={{flexDirection: 'column'}}>
+                  <Text style={styles.name}>{`${option.COM}`}</Text>
+                  <Text style={{marginLeft: 15, color: 'white'}}>{`Escalão: ${option.Pot_Cont} kWh`}</Text>
+                </View>
+
+                <Text style={styles.custo}>{`€${option.totalCost.toFixed(2)}`}</Text>
+              </View>
+
+              <View style={styles.precos}>
+                <Text style={styles.preco_dia}>{`Preço por Dia: ${option.TFGN.toFixed(2)}€`}</Text>
+                <Text style={styles.barra}>|</Text>
+                <Text style={styles.preco_kwh}>{`Preço por kWh: ${option["TVGN"].toFixed(2)}€`}</Text>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+
+      {consumoEletricidade !== "" && consumoGas !== "" && top5Options.length > 0 && (
+        <ScrollView style={styles.resultsContainer}>
+          {top5Options.map((option, index) => (
+            <View>
+              <View key={index} style={styles.result}>
+                <View style={{flexDirection: 'row'}}>
+                  {option.COM === "EDPC" ? (
+                    <Image source={require("@/assets/images/edp-logo.png")} style={styles.image} />
+                  ) : option.COM === "GALP" ? (
+                    <Image source={require("@/assets/images/galp-logo.png")} style={styles.image} />
+                  ) : option.COM === "G9ENERGY" ? (
+                    <Image source={require("@/assets/images/g9-logo.png")} style={styles.image} />
+                  ) : option.COM === "GOLD" ? (
+                    <Image source={require("@/assets/images/gold-logo.png")} style={styles.image} />
+                  ) : option.COM === "IBD" ? (
+                    <Image source={require("@/assets/images/ibd-logo.png")} style={styles.image} />
+                  ) : null}
+                  
+                  <View style={{flexDirection: 'column'}}>
+                    <Text style={styles.name}>{`${option.COM}`}</Text>
+                    <Text style={styles.potencia}>{`Escalão: ${option.Pot_Cont.toFixed(2)} kWh`}</Text>
+                  </View>
+
+                  <Text style={styles.custo}>{`€${option.totalCost.toFixed(2)}`}</Text>
+                </View>
+
+                <View style={styles.precos}>
+                  <Text style={styles.preco_dia}>{`Preço por Dia: ${option.TF.toFixed(2)}€`}</Text>
+                  <Text style={styles.barra}>|</Text>
+                  <Text style={styles.preco_kwh}>{`Preço por kWh: ${option["TV|TVFV|TVP"].toFixed(2)}€`}</Text>
+                </View>
+              </View>
+
+              <View key={index} style={styles.result}>
+                <View style={{flexDirection: 'row'}}>
+                  {option.COM === "EDPC" ? (
+                    <Image source={require("@/assets/images/edp-logo.png")} style={styles.image} />
+                  ) : option.COM === "GALP" ? (
+                    <Image source={require("@/assets/images/galp-logo.png")} style={styles.image} />
+                  ) : option.COM === "G9ENERGY" ? (
+                    <Image source={require("@/assets/images/g9-logo.png")} style={styles.image} />
+                  ) : option.COM === "GOLD" ? (
+                    <Image source={require("@/assets/images/gold-logo.png")} style={styles.image} />
+                  ) : option.COM === "IBD" ? (
+                    <Image source={require("@/assets/images/ibd-logo.png")} style={styles.image} />
+                  ) : null}
+                  
+                  <View style={{flexDirection: 'column'}}>
+                    <Text style={styles.name}>{`${option.COM}`}</Text>
+                    <Text style={{marginLeft: 15, color: 'white'}}>{`Escalão: ${option.Pot_Cont} kWh`}</Text>
+                  </View>
+
+                  <Text style={styles.custo}>{`€${option.totalCost.toFixed(2)}`}</Text>
+                </View>
+
+                <View style={styles.precos}>
+                  <Text style={styles.preco_dia}>{`Preço por Dia: ${option.TF.toFixed(2)}€`}</Text>
+                  <Text style={styles.barra}>|</Text>
+                  <Text style={styles.preco_kwh}>{`Preço por kWh: ${option["TV|TVFV|TVP"].toFixed(2)}€`}</Text>
+                </View>
               </View>
             </View>
           ))}
@@ -162,7 +328,7 @@ const styles = StyleSheet.create({
 
   input2: {
     marginTop: 20,
-    marginLeft: 20,
+    marginLeft: 18,
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,

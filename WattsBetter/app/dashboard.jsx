@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, ImageBackground, Image, Dimensions, TextInput, TouchableOpacity } from 'react-native';
-
+import { BarChart, LineChart } from "react-native-chart-kit";
 import { Link } from 'expo-router'
 
 import solarPanels from "@/assets/images/solar-panels.jpg"
@@ -16,6 +16,30 @@ const calculateFontSize = (percentage) => {
   return (width * percentage) / 100;
 };
 
+const screenWidth = Dimensions.get("window").width;
+
+const chartConfig = {
+  backgroundGradientFrom: "white",
+  backgroundGradientTo: "white",
+  color: (opacity = 1) => `rgba(255, 127, 62, ${opacity})`, // Cor verde para imitar apps de trading
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+  strokeWidth: 2,
+  propsForDots: {
+    r: "3",
+    strokeWidth: "1",
+    stroke: "#fff",
+  },
+};
+
+const stockData = {
+  labels: ["10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00"],
+  datasets: [
+    {
+      data: [150, 155, 149, 160, 162, 158, 165], // Valores simulados do preço das ações
+      strokeWidth: 2,
+    },
+  ],
+};
 
 export default function TabTwoScreen() {
   return (
@@ -41,33 +65,33 @@ export default function TabTwoScreen() {
         <Text style={styles.shortcuts_title}>Acessos rápidos</Text>
 
         <View style={styles.shortcuts_container}>
-          <View style={styles.shortcut}>
+          <Link href='/five_best_elec' style={styles.shortcut}><View style={{width: '100%', height: '100%'}}>
             <View style={styles.shortcuts_image_container}>
               <Image source={compareIcon} style={styles.shortcuts_image}></Image>
             </View>
             <Text style={styles.shortcuts_name}>Simular{'\n'}Preços</Text>
-          </View>
+          </View></Link>
         
-          <View style={styles.shortcut}>
+          <Link href='/contract' style={styles.shortcut}><View style={{width: '100%', height: '100%'}}>
             <View style={styles.shortcuts_image_container}>
               <Image source={switchIcon} style={styles.shortcuts_image}></Image>
             </View>
             <Text style={styles.shortcuts_name}>Gestor{'\n'}Contratos</Text>
-          </View>
+            </View></Link>
 
-          <View style={styles.shortcut}>
+          <Link href='/carteira' style={styles.shortcut}><View style={{width: '100%', height: '100%'}}>
             <View style={styles.shortcuts_image_container}>
               <Image source={walletIcon} style={styles.shortcuts_image}></Image>
             </View>
             <Text style={styles.shortcuts_name}>Carteira</Text>
-          </View>
+            </View></Link>
 
-          <View style={styles.shortcut}>
+          <Link href='/contract' style={styles.shortcut}><View style={{width: '100%', height: '100%'}}>
             <View style={styles.shortcuts_image_container}>
               <Image source={profileIcon} style={styles.shortcuts_image}></Image>
             </View>
             <Text style={styles.shortcuts_name}>Perfil</Text>
-          </View>
+            </View></Link>
         </View>
       </View>
 
@@ -92,21 +116,23 @@ export default function TabTwoScreen() {
           </View>
         </Link>
       </View>
+    
+      {/* Investments card */}
+      <Link href='/' style={styles.inv_proj_card}>
+        <View style={styles.inv_proj_card}>
+          <Text style={styles.investments_title}>Últimas Atualizações:</Text>
 
-      {/* Investments + Contracts card */}
-      <View style={styles.inv_proj_card}>
-
-        {/* Investments card */}
-        <View>
-          <Text style={styles.investments_title}>Ações:</Text>
+          <LineChart
+            data={stockData}
+            width={350}
+            height={200}
+            yAxisLabel="€"
+            chartConfig={chartConfig}
+            bezier
+            style={styles.chartStyle}
+          />
         </View>
-
-        {/* Projects card */}
-        <View>
-          <Text style={styles.projects_title}>Projetos:</Text>
-        </View>
-
-      </View>
+      </Link>
 
     </View>
   );
@@ -332,23 +358,26 @@ const styles = StyleSheet.create({
   // ---- Investments + Projects card  ---
 
   inv_proj_card: {
-    flexDirection: 'row',
-    flex: 0.35,
-    width: '100%',
-    marginTop: '',
-    marginLeft: '5%',
-    backgroundColor: 'yellow',
+    flexDirection: 'column',
+    flex: 0.33,
+    width: 370,
+    marginTop: 10,
+    marginLeft: 10,
+    backgroundColor: 'white',
+    borderRadius: 15,
   },
 
   investments_title: {
     color: '#FF7F3E',
     fontSize: calculateFontSize(5),
     fontWeight: 'bold',
+    marginBottom: '10',
+    marginTop: 5,
+    marginLeft: 10,
   },
 
-  projects_title: {
-    color: '#FF7F3E',
-    fontSize: calculateFontSize(5),
-    fontWeight: 'bold',
+  chartStyle: {
+    borderRadius: 8,
+    marginLeft: 10,
   },
 });

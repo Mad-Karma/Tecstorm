@@ -5,21 +5,18 @@ import { Link } from 'expo-router'
 import iconBrancoSF from "@/assets/images/icon-branco (sem fundo + sem nome).png"
 import fundoGradiente from "@/assets/images/fundo-gradiente.png"
 
+import check from "@/assets/images/check.png"
+import cross from "@/assets/images/cross.png"
+
 const { width, height } = Dimensions.get('window');
 
 const calculateFontSize = (percentage) => {
   return (width * percentage) / 100;
 };
 
-const app = () => {
-
+export default function AutoSwitch() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleLogin = () => {
-    console.log('Username:', username);
-    console.log('Password:', password);
-  };
 
   return (
     <View style={styles.container}>
@@ -27,51 +24,36 @@ const app = () => {
       <ImageBackground source={fundoGradiente} style={styles.container_top}>
 
         <Image source={iconBrancoSF} style={styles.img_icon} />
-          <Text style={styles.text}>Bem vindo! {'\n'} Aceda à sua conta</Text>
+          <Text style={styles.text}>Auto Switch</Text>
 
-        <View style={styles.container_floating}>
+        <View style={styles.container_floating1}>
+          <View style={styles.titulo_container}>
+            <Text style={styles.titulo_text}>Plano Gratuito</Text>
+          </View>
 
-          <TextInput 
-            style={styles.input} 
-            marginTop='10%'
-            placeholder='Nome de Utilizador'
-            placeholderTextColor="#888"
-            value={username}
-            onChangeText={setUsername}
-            autoCapitalize="none"
-          />
+          <View style={styles.line}>
+            <Image source={check} style={styles.check}></Image>
+            <Text>Acesso ao simulador de preços</Text>
+          </View>
 
-          <TextInput 
-            style={styles.input} 
-            marginTop='6%'
-            placeholder='Palavra-passe'
-            placeholderTextColor='#888'
-            value={password}
-            onChangeText={setPassword}
-            autoCapitalize="none"
-            secureTextEntry={true}
-          />
+          <View style={styles.line}>
+            <Image source={check} style={styles.check}></Image>
+            <Text>Acesso à plataforma de investimento</Text>
+          </View>
 
-          <Text
-            marginTop='2%'
-            alignSelf='left'
-            marginLeft='10%'
-            style={styles.forgot_password}
-          >
-            Esqueceu a palavra-passe?
-          </Text>
+          <View style={styles.line}>
+            <Image source={check} style={styles.check}></Image>
+            <Text>Apoio ao cliente</Text>
+          </View>
 
-          <Link href="/dashboard" asChild>
-            <TouchableOpacity style={styles.login_button} onPress={handleLogin}>
-              <Text style={styles.login_text}>Log In</Text>
-            </TouchableOpacity>
-          </Link>
+          <View style={styles.line}>
+            <Image source={cross} style={styles.check}></Image>
+            <Text>Acesso a ofertas exclusívos</Text>
+          </View>
 
-          <View style={styles.container_sign_up}>
-            <Text style={styles.text_no_account}>Não tem uma conta?</Text>
-            <Link href="/carteira">
-              <Text style={styles.sign_up}>  Registe-se</Text>
-            </Link>
+          <View style={styles.line}>
+            <Image source={cross} style={styles.check}></Image>
+            <Text>Aconselhamento de analistas para investimentos</Text>
           </View>
 
         </View>
@@ -81,10 +63,8 @@ const app = () => {
       <View style={styles.container_bottom} />
     
     </View>
-  )
+  );
 }
-
-export default app
 
 const styles = StyleSheet.create({
   container: {
@@ -123,12 +103,12 @@ const styles = StyleSheet.create({
     marginTop: '-10%',
   },
 
-  container_floating: {
+  container_floating1: {
     flexDirection: 'column',
     zIndex: 1,
     marginTop: '11%',
     width: '85%',
-    height: '100%',
+    height: '70%',
     backgroundColor: 'white',
     borderRadius: 15,
     alignItems: 'center',
@@ -180,6 +160,25 @@ const styles = StyleSheet.create({
 
   sign_up: {
     color: '#FF7F3E',
-  }
+  },
 
-})
+  check: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  
+  line: {
+    marginTop: 10,
+    width: 300,
+    flexDirection: 'row',
+  },
+
+  titulo_text: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 20,
+    color: '#FF7F3E'
+  }
+});
